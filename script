@@ -149,8 +149,6 @@ TweenService:Create(Main, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {
 wait(0.6)
 Gui:Destroy()
 
--- ⚡ MFHUB LIGHTNING EFFECT (READY TO PASTE)
-
 local TweenService = game:GetService("TweenService")
 
 -- hanapin existing GUI
@@ -184,12 +182,10 @@ local function Flash()
 	}):Play()
 end
 
--- optional: test flash agad (para makita mo gumagana)
 task.delay(1, function()
 	Flash()
 end)
 
--- random lightning loop
 task.spawn(function()
 	while Gui and Gui.Parent do
 		task.wait(math.random(2,5))
