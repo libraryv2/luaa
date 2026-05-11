@@ -1,189 +1,50 @@
-local TweenService = game:GetService("TweenService")
-
--- CLEAN OLD
-for _,v in pairs(game.CoreGui:GetChildren()) do
-	if v.Name == "MFHUBLoader" then
-		v:Destroy()
-	end
-end
-
--- GUI
-local Gui = Instance.new("ScreenGui")
-Gui.Name = "MFHUBLoader"
-Gui.Parent = game.CoreGui
-Gui.ResetOnSpawn = false
-
--- BACKDROP (blur illusion)
-local Backdrop = Instance.new("Frame")
-Backdrop.Parent = Gui
-Backdrop.Size = UDim2.new(1,0,1,0)
-Backdrop.BackgroundColor3 = Color3.fromRGB(0,0,0)
-Backdrop.BackgroundTransparency = 0.45
-
--- MAIN GLASS FRAME
-local Main = Instance.new("Frame")
-Main.Parent = Gui
-Main.AnchorPoint = Vector2.new(0.5,0.5)
-Main.Position = UDim2.new(0.5,0,0.5,0)
-Main.Size = UDim2.new(0,420,0,210)
-Main.BackgroundColor3 = Color3.fromRGB(10,10,15)
-Main.BackgroundTransparency = 0.35
-Main.BorderSizePixel = 0
-
-local Corner = Instance.new("UICorner")
-Corner.CornerRadius = UDim.new(0,18)
-Corner.Parent = Main
-
--- BORDER GLOW (blue tint glass)
-local Stroke = Instance.new("UIStroke")
-Stroke.Parent = Main
-Stroke.Thickness = 2
-Stroke.Color = Color3.fromRGB(0,170,255)
-Stroke.Transparency = 0.4
-
--- SOFT BLUE LIGHT EFFECT
-local Glow = Instance.new("Frame")
-Glow.Parent = Main
-Glow.BackgroundColor3 = Color3.fromRGB(0,140,255)
-Glow.BackgroundTransparency = 0.85
-Glow.Size = UDim2.new(1,0,1,0)
-
-local GlowCorner = Instance.new("UICorner")
-GlowCorner.CornerRadius = UDim.new(0,18)
-GlowCorner.Parent = Glow
-
--- TITLE
-local Title = Instance.new("TextLabel")
-Title.Parent = Main
-Title.BackgroundTransparency = 1
-Title.Position = UDim2.new(0,0,0.08,0)
-Title.Size = UDim2.new(1,0,0,45)
-Title.Font = Enum.Font.GothamBlack
-Title.Text = "MFHUB"
-Title.TextColor3 = Color3.fromRGB(255,255,255)
-Title.TextScaled = true
-
--- SUBTITLE
-local Sub = Instance.new("TextLabel")
-Sub.Parent = Main
-Sub.BackgroundTransparency = 1
-Sub.Position = UDim2.new(0,0,0.26,0)
-Sub.Size = UDim2.new(1,0,0,25)
-Sub.Font = Enum.Font.GothamBold
-Sub.Text = "by swift"
-Sub.TextColor3 = Color3.fromRGB(255,0,0)
-Sub.TextScaled = true
-
--- STATUS TEXT (always visible)
-local Status = Instance.new("TextLabel")
-Status.Parent = Main
-Status.BackgroundTransparency = 1
-Status.Position = UDim2.new(0,0,0.6,0)
-Status.Size = UDim2.new(1,0,0,20)
-Status.Font = Enum.Font.GothamMedium
-Status.Text = "Starting system..."
-Status.TextColor3 = Color3.fromRGB(255,255,255)
-Status.TextTransparency = 0.1
-Status.TextScaled = true
-
--- PROGRESS BAR BG (glass blue)
-local BarBG = Instance.new("Frame")
-BarBG.Parent = Main
-BarBG.Position = UDim2.new(0.1,0,0.78,0)
-BarBG.Size = UDim2.new(0.8,0,0,10)
-BarBG.BackgroundColor3 = Color3.fromRGB(0,80,140)
-BarBG.BackgroundTransparency = 0.6
-BarBG.BorderSizePixel = 0
-
-local BarCorner = Instance.new("UICorner")
-BarCorner.CornerRadius = UDim.new(1,0)
-BarCorner.Parent = BarBG
-
--- PROGRESS FILL
-local Bar = Instance.new("Frame")
-Bar.Parent = BarBG
-Bar.Size = UDim2.new(0,0,1,0)
-Bar.BackgroundColor3 = Color3.fromRGB(0,170,255)
-Bar.BorderSizePixel = 0
-
-local BarCorner2 = Instance.new("UICorner")
-BarCorner2.CornerRadius = UDim.new(1,0)
-BarCorner2.Parent = Bar
-
--- OPEN ANIMATION
-Main.Size = UDim2.new(0,0,0,0)
-TweenService:Create(
-	Main,
-	TweenInfo.new(0.6, Enum.EasingStyle.Quint, Enum.EasingDirection.Out),
-	{Size = UDim2.new(0,420,0,210)}
-):Play()
-
--- LOADING STEPS
-local steps = {
-	"Booting core...",
-	"Loading interface...",
-	"Applying glass UI...",
-	"Syncing modules...",
-	"Optimizing visuals...",
-	"MFHUB Ready"
-}
-
-for i,v in ipairs(steps) do
-	Status.Text = v
-
-	TweenService:Create(Bar, TweenInfo.new(0.6, Enum.EasingStyle.Sine), {
-		Size = UDim2.new(i/#steps,0,1,0)
-	}):Play()
-
-	wait(0.8)
-end
-
-wait(0.4)
-
--- CLOSE ANIMATION
-TweenService:Create(Main, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {
-	BackgroundTransparency = 1,
-	Size = UDim2.new(0,0,0,0)
-}):Play()
-
-wait(0.6)
-Gui:Destroy()
+-- ⚡ MFHUB LIGHTNING EFFECT (READY TO PASTE)
 
 local TweenService = game:GetService("TweenService")
 
--- LIGHTNING LAYER
+-- hanapin existing GUI
+local Gui = game.CoreGui:FindFirstChild("MFHUBLoader")
+if not Gui then return end
+
+-- overlay layer
 local Lightning = Instance.new("Frame")
+Lightning.Name = "LightningFX"
 Lightning.Parent = Gui
 Lightning.Size = UDim2.new(1,0,1,0)
 Lightning.BackgroundColor3 = Color3.fromRGB(255,255,255)
 Lightning.BackgroundTransparency = 1
-Lightning.ZIndex = 10
+Lightning.ZIndex = 999
 
--- LIGHTNING FLASH FUNCTION
-local function flashLightning()
+-- flash function
+local function Flash()
 	Lightning.BackgroundTransparency = 1
 
-	-- quick flash in
+	-- quick flash in (white/blue tint feel)
+	Lightning.BackgroundColor3 = Color3.fromRGB(255,255,255)
+
 	TweenService:Create(Lightning, TweenInfo.new(0.05), {
-		BackgroundTransparency = 0.4
+		BackgroundTransparency = 0.65
 	}):Play()
 
-	wait(0.05)
+	task.wait(0.06)
 
-	-- fade out fast
-	TweenService:Create(Lightning, TweenInfo.new(0.2), {
+	TweenService:Create(Lightning, TweenInfo.new(0.25), {
 		BackgroundTransparency = 1
 	}):Play()
 end
 
--- RANDOM LIGHTNING LOOP
-task.spawn(function()
-	while Gui.Parent do
-		wait(math.random(2,5)) -- random timing
+-- optional: test flash agad (para makita mo gumagana)
+task.delay(1, function()
+	Flash()
+end)
 
-		-- chance to trigger lightning
-		if math.random(1,100) <= 35 then
-			flashLightning()
+-- random lightning loop
+task.spawn(function()
+	while Gui and Gui.Parent do
+		task.wait(math.random(2,5))
+
+		if math.random(1,100) <= 40 then
+			Flash()
 		end
 	end
 end)
