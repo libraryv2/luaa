@@ -148,3 +148,42 @@ TweenService:Create(Main, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {
 
 wait(0.6)
 Gui:Destroy()
+
+local TweenService = game:GetService("TweenService")
+
+-- LIGHTNING LAYER
+local Lightning = Instance.new("Frame")
+Lightning.Parent = Gui
+Lightning.Size = UDim2.new(1,0,1,0)
+Lightning.BackgroundColor3 = Color3.fromRGB(255,255,255)
+Lightning.BackgroundTransparency = 1
+Lightning.ZIndex = 10
+
+-- LIGHTNING FLASH FUNCTION
+local function flashLightning()
+	Lightning.BackgroundTransparency = 1
+
+	-- quick flash in
+	TweenService:Create(Lightning, TweenInfo.new(0.05), {
+		BackgroundTransparency = 0.4
+	}):Play()
+
+	wait(0.05)
+
+	-- fade out fast
+	TweenService:Create(Lightning, TweenInfo.new(0.2), {
+		BackgroundTransparency = 1
+	}):Play()
+end
+
+-- RANDOM LIGHTNING LOOP
+task.spawn(function()
+	while Gui.Parent do
+		wait(math.random(2,5)) -- random timing
+
+		-- chance to trigger lightning
+		if math.random(1,100) <= 35 then
+			flashLightning()
+		end
+	end
+end)
