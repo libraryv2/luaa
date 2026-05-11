@@ -1,0 +1,132 @@
+local TweenService = game:GetService("TweenService")
+
+-- CLEAN OLD GUI
+for _,v in pairs(game.CoreGui:GetChildren()) do
+	if v.Name == "MFHUBLoader" then
+		v:Destroy()
+	end
+end
+
+-- GUI
+local Gui = Instance.new("ScreenGui")
+Gui.Name = "MFHUBLoader"
+Gui.Parent = game.CoreGui
+Gui.ResetOnSpawn = false
+
+-- MAIN
+local Main = Instance.new("Frame")
+Main.Parent = Gui
+Main.AnchorPoint = Vector2.new(0.5,0.5)
+Main.Position = UDim2.new(0.5,0,0.5,0)
+Main.Size = UDim2.new(0,0,0,0)
+Main.BackgroundColor3 = Color3.fromRGB(10,10,10)
+Main.BorderSizePixel = 0
+
+local Corner = Instance.new("UICorner")
+Corner.CornerRadius = UDim.new(0,14)
+Corner.Parent = Main
+
+local Stroke = Instance.new("UIStroke")
+Stroke.Parent = Main
+Stroke.Thickness = 2
+Stroke.Color = Color3.fromRGB(255,255,255)
+
+-- TITLE
+local Title = Instance.new("TextLabel")
+Title.Parent = Main
+Title.BackgroundTransparency = 1
+Title.Position = UDim2.new(0,0,0.1,0)
+Title.Size = UDim2.new(1,0,0,40)
+Title.Font = Enum.Font.GothamBlack
+Title.Text = "MFHUB"
+Title.TextColor3 = Color3.fromRGB(255,255,255)
+Title.TextScaled = true
+
+-- SUBTITLE
+local Sub = Instance.new("TextLabel")
+Sub.Parent = Main
+Sub.BackgroundTransparency = 1
+Sub.Position = UDim2.new(0,0,0.28,0)
+Sub.Size = UDim2.new(1,0,0,25)
+Sub.Font = Enum.Font.GothamBold
+Sub.Text = "by swift"
+Sub.TextColor3 = Color3.fromRGB(255,0,0)
+Sub.TextScaled = true
+
+-- STATUS
+local Status = Instance.new("TextLabel")
+Status.Parent = Main
+Status.BackgroundTransparency = 1
+Status.Position = UDim2.new(0,0,0.6,0)
+Status.Size = UDim2.new(1,0,0,20)
+Status.Font = Enum.Font.GothamMedium
+Status.Text = "Starting..."
+Status.TextColor3 = Color3.fromRGB(255,255,255)
+Status.TextScaled = true
+
+-- PROGRESS BAR BG
+local BarBG = Instance.new("Frame")
+BarBG.Parent = Main
+BarBG.Position = UDim2.new(0.1,0,0.78,0)
+BarBG.Size = UDim2.new(0.8,0,0,8)
+BarBG.BackgroundColor3 = Color3.fromRGB(30,30,30)
+BarBG.BorderSizePixel = 0
+
+local BarCorner = Instance.new("UICorner")
+BarCorner.CornerRadius = UDim.new(1,0)
+BarCorner.Parent = BarBG
+
+-- PROGRESS BAR
+local Bar = Instance.new("Frame")
+Bar.Parent = BarBG
+Bar.Size = UDim2.new(0,0,1,0)
+Bar.BackgroundColor3 = Color3.fromRGB(255,0,0)
+Bar.BorderSizePixel = 0
+
+local BarCorner2 = Instance.new("UICorner")
+BarCorner2.CornerRadius = UDim.new(1,0)
+BarCorner2.Parent = Bar
+
+-- OPEN ANIMATION
+TweenService:Create(
+	Main,
+	TweenInfo.new(0.6, Enum.EasingStyle.Quint, Enum.EasingDirection.Out),
+	{Size = UDim2.new(0,400,0,200)}
+):Play()
+
+-- LOADING STEPS
+local steps = {
+	"Initializing system...",
+	"Loading UI...",
+	"Checking assets...",
+	"Syncing data...",
+	"Almost ready...",
+	"Welcome to MFHUB"
+}
+
+for i,v in ipairs(steps) do
+	Status.Text = v
+
+	TweenService:Create(
+		Bar,
+		TweenInfo.new(0.6, Enum.EasingStyle.Sine),
+		{Size = UDim2.new(i/#steps,0,1,0)}
+	):Play()
+
+	wait(0.9)
+end
+
+wait(0.5)
+
+-- CLOSE ANIMATION
+TweenService:Create(
+	Main,
+	TweenInfo.new(0.5, Enum.EasingStyle.Quint),
+	{
+		Size = UDim2.new(0,0,0,0),
+		BackgroundTransparency = 1
+	}
+):Play()
+
+wait(0.6)
+Gui:Destroy()
